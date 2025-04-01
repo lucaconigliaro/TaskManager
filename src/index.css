@@ -1,0 +1,32 @@
+/* Overlay che sfoca tutto lo sfondo */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4); 
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenitore del modale */
+.modal-content {
+    background-color: #fff;
+    width: 40vw;
+    max-width: 500px;
+    padding: 25px;
+    border: 3px solid #333;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* Bottoni della modale */
+.modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}

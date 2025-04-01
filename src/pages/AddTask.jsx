@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import useTasks from "../hooks/useTasks";
+import { useNavigate } from "react-router-dom";
 
 const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 
@@ -9,6 +10,7 @@ function AddTask() {
     const statusRef = useRef();
     const [error, setError] = useState("");
     const { addTask } = useTasks();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,6 +38,7 @@ function AddTask() {
             setTitle("");
             descriptionRef.current.value = "";
             statusRef.current.value = "To do"; 
+            navigate("/")
         } catch (err) {
             alert("Impossibile creare la task", err.message);
         }  
