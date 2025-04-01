@@ -40,8 +40,18 @@ function useTasks() {
         }
     };
 
-    async function removeTask() {
-        // rimuovo nuovo task
+    async function removeTask(taskId) {
+        try {
+            const response = await axios.delete(`${API_URL}/tasks/${taskId}`)
+            if (response.data.success) {
+                setTasks(tasks.filter(task => task.id !== taskId))
+            } else {
+                throw new Error(response.data.message)
+            }
+        }
+        catch (err) {
+            console.error(err.message)
+        }
     };
 
     async function updateTask() {
