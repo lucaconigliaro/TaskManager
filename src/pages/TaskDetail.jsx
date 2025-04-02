@@ -2,25 +2,37 @@ import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../contexts/GlobalContext";
 import Modal from "../components/Modal";
+import EditTaskModal from "../components/EditTaskModal";
 
 export default function TaskDetail() {
     const { id } = useParams(); // Prende l'ID dall'URL
-    const { tasks, removeTask, getTasks } = useContext(GlobalContext);
+    const { tasks, removeTask, getTasks, updateTask } = useContext(GlobalContext);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
 
     // Trova il task con quell'ID
     const task = tasks.find(task => task.id.toString() === id);
     if (!task) return;
 
     const handleDelete = async () => {
-        try{
+        try {
             await removeTask(task.id);
             await getTasks();
             alert("Task eliminato con successo");
             navigate('/')
-        }catch (err) {
+        } catch (err) {
             alert("Errore durante l'eliminazione del task:", err.message)
+        }
+    };
+
+    const handleSave = async (updatedTask) => {
+        try {
+            await updateTask(task.id, updatedTask);
+            await getTasks();
+            alert("Task modificato con successo")
+        }catch (err) {
+            alert("Errore durante la modifica del task:", err.message)
         }
     };
 
@@ -32,7 +44,10 @@ export default function TaskDetail() {
                     <p className="card-subtitle mb-2">{task.createdAt}</p>
                     <p className="card-text">{task.description}</p>
                     <p>{task.status}</p>
-                    <div className="mt-auto d-flex justify-content-end">
+                    <div className="mt-auto d-flex justify-content-between">
+                        <button className="btn btn-primary" onClick={() => setShowEditModal(true)}>
+                            Modifica Task
+                        </button>
                         <button className="btn btn-danger" onClick={() => setShowModal(true)}>
                             Elimina Task
                         </button>
@@ -47,6 +62,13 @@ export default function TaskDetail() {
                 onClose={() => setShowModal(false)}
                 onConfirm={handleDelete}
                 confirmText="Elimina"
+            />
+
+            <EditTaskModal
+                show={showEditModal}
+                onClose={() => setShowEditModal(false)}
+                task={task}
+                onSave={handleSave}
             />
         </div>
     );

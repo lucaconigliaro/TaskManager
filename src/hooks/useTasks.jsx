@@ -21,7 +21,7 @@ function useTasks() {
     };
 
     // Recupero i dati solo al primo render
-   useEffect(() => {
+    useEffect(() => {
         getTasks()
     }, []);
 
@@ -29,7 +29,7 @@ function useTasks() {
         try {
             const response = await axios.post(`${API_URL}/tasks`, newTask);
             console.log("Risposta API:", response.data); // Controlla cosa restituisce l'API
-    
+
             if (response.data.success) {
                 setTasks([...tasks, newTask]);
             } else {
@@ -48,14 +48,23 @@ function useTasks() {
             } else {
                 throw new Error(response.data.message)
             }
-        }
-        catch (err) {
+        } catch (err) {
             console.error(err.message)
         }
     };
 
-    async function updateTask() {
-        // modifico task
+    async function updateTask(taskId, updatedTask) {
+        try {
+            const response = await axios.put(`${API_URL}/tasks/${taskId}`, updatedTask)
+            if (response.data.success) {
+                const updatedTasks = tasks.map(task => 
+                    task.id === taskId ? { ...response.data.task } : task
+                );
+                setTasks(updatedTasks);
+            }
+        } catch (err) {
+            console.error(err.message)
+        }
     };
 
     return ({
