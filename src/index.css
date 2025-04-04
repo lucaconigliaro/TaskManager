@@ -30,3 +30,8 @@
     display: flex;
     justify-content: space-between;
 }
+
+
+.sortable-header {
+    cursor: pointer;
+  }

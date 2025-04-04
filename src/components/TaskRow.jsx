@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 
 export default function TaskRow({ task }) {
@@ -24,7 +25,7 @@ export default function TaskRow({ task }) {
                 {task.status}
             </td>
             <td>
-                {task.createdAt}
+                {dayjs(task.createdAt).format("DD/MM/YYYY")}
             </td>
         </tr>
     );
