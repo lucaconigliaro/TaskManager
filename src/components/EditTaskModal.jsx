@@ -70,6 +70,7 @@ export default function EditTaskModal({
             show={show}
             confirmText="Salva"
             onConfirm={() => editFormRef.current.requestSubmit()}
+            onClose={onClose}
         />
     );
 };
