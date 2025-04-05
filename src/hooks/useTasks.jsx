@@ -31,7 +31,7 @@ function useTasks() {
             console.log("Risposta API:", response.data); // Controlla cosa restituisce l'API
 
             if (response.data.success) {
-                setTasks([...tasks, newTask]);
+                setTasks((prevTasks) => [...prevTasks, response.data.task]);
             } else {
                 throw new Error(response.data.message);
             }
@@ -42,28 +42,30 @@ function useTasks() {
 
     async function removeTask(taskId) {
         try {
-            const response = await axios.delete(`${API_URL}/tasks/${taskId}`)
+            const response = await axios.delete(`${API_URL}/tasks/${taskId}`);
             if (response.data.success) {
-                setTasks(tasks.filter(task => task.id !== taskId))
-            } else {
-                throw new Error(response.data.message)
+                setTasks((prevTasks) => prevTasks.filter(task => task.id !== taskId));
+                throw new Error(response.data.message);
             }
         } catch (err) {
-            console.error(err.message)
+            console.error("Errore nel rimuovere il task:", err.message);
         }
     };
 
     async function updateTask(taskId, updatedTask) {
         try {
-            const response = await axios.put(`${API_URL}/tasks/${taskId}`, updatedTask)
+            const response = await axios.put(`${API_URL}/tasks/${taskId}`, updatedTask);
             if (response.data.success) {
-                const updatedTasks = tasks.map(task => 
-                    task.id === taskId ? { ...response.data.task } : task
+                setTasks((prevTasks) =>
+                    prevTasks.map(task =>
+                        task.id === taskId ? { ...response.data.task } : task
+                    )
                 );
-                setTasks(updatedTasks);
+            } else {
+                throw new Error(response.data.message);
             }
         } catch (err) {
-            console.error(err.message)
+            console.error("Errore nell'aggiornare il task:", err.message);
         }
     };
 

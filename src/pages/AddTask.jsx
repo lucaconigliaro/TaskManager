@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
-import useTasks from "../hooks/useTasks";
+import { useContext, useRef, useState } from "react";
+
 import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../contexts/GlobalContext";
 
 const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 
@@ -9,7 +10,7 @@ function AddTask() {
     const descriptionRef = useRef();
     const statusRef = useRef();
     const [error, setError] = useState("");
-    const { addTask } = useTasks();
+    const { addTask } = useContext(GlobalContext)
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {

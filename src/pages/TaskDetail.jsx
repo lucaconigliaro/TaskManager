@@ -13,7 +13,7 @@ export default function TaskDetail() {
     const [showEditModal, setShowEditModal] = useState(false);
 
     // Trova il task con quell'ID
-    const task = tasks.find(task => task.id.toString() === id);
+    const task = tasks.find(task => task.id === parseInt(id));
     if (!task) return;
 
     const handleDelete = async () => {
