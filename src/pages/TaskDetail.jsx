@@ -7,31 +7,32 @@ import dayjs from "dayjs";
 
 export default function TaskDetail() {
     const { id } = useParams(); // Prende l'ID dall'URL
-    const { tasks, removeTask, getTasks, updateTask } = useContext(GlobalContext);
+    const { tasks, removeTask, updateTask } = useContext(GlobalContext);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
 
     // Trova il task con quell'ID
     const task = tasks.find(task => task.id === parseInt(id));
-    if (!task) return;
+    if (!task)
+        return (
+            <h2 className="container">Task non trovata</h2>
+        );
 
     const handleDelete = async () => {
         try {
             await removeTask(task.id);
-            await getTasks();
             alert("Task eliminato con successo");
             navigate('/');
         } catch (err) {
-            alert("Errore durante l'eliminazione del task:", err.message);
+            alert(err.message);
         }
     };
 
     const handleSave = async (updatedTask) => {
         try {
-            await updateTask(task.id, updatedTask);
-            await getTasks();
-            alert("Task modificato con successo");
+            await updateTask(updatedTask);
+            setShowEditModal(false)
         } catch (err) {
             alert("Errore durante la modifica del task:", err.message);
         }

@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
+import React from "react";
 import { Link } from "react-router-dom";
 
-export default function TaskRow({ task }) {
-
-    // Funzione per determinare la classe in base allo stato del task
+function TaskRow({ task }) {
+ // Funzione per determinare la classe in base allo stato del task
     const getStatusClass = (status) => {
         if (status === "To do")
             return "bg-danger text-white";
@@ -30,3 +30,5 @@ export default function TaskRow({ task }) {
         </tr>
     );
 };
+
+export default React.memo(TaskRow);

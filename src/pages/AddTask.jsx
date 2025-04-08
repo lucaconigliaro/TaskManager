@@ -1,5 +1,4 @@
-import { useContext, useRef, useState } from "react";
-
+import { useContext, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../contexts/GlobalContext";
 
@@ -9,40 +8,39 @@ function AddTask() {
     const [title, setTitle] = useState("");
     const descriptionRef = useRef();
     const statusRef = useRef();
-    const [error, setError] = useState("");
     const { addTask } = useContext(GlobalContext)
     const navigate = useNavigate();
 
+    const titleError = useMemo(() => {
+        if (!title.trim())
+            return "Il nome della task non può essere vuoto.";
+        if ([...title].some(symbol => symbols.includes(symbol)))
+            return "Il nome della task non può contenere simboli speciali.";
+        return "";
+    }, [title]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const description = descriptionRef.current.value;
-        const status = statusRef.current.value;
-
-        if (!title.trim()) {
-            setError("Il campo 'Nome' non può essere vuoto.");
+        if (titleError) {
             return;
-        } else if (symbols.split("").some((symbol) => title.includes(symbol))) {
-            setError("Il campo 'Nome' non può contenere simboli speciali.");
-            return;
-        } else if (!description.trim()) {
-            setError("Il campo 'Descrizione' non può essere vuoto.");
-            return;
-        };
+        }
 
-        setError(""); // Reset dell'errore
+        const newTask = {
+            title: title.trim(),
+            description: descriptionRef.current.value,
+            status: statusRef.current.value
+        }
 
-        const task = { title, description, status };
         try {
-            await addTask(task); // Aspetta la risposta della funzione
-            alert("Task creata con successo!"); 
-            // Reset dei campi
+            await addTask(newTask);
+            alert("Task aggiunta con successo")
             setTitle("");
             descriptionRef.current.value = "";
-            statusRef.current.value = "To do"; 
-            navigate("/")
+            statusRef.current.value = ""
+            navigate("/");
         } catch (err) {
-            alert("Impossibile creare la task", err.message);
-        }  
+            alert(err.message);
+        }
     };
 
     return (
@@ -58,6 +56,8 @@ function AddTask() {
                         className="form-control"
                     />
                 </div>
+                {titleError &&
+                    <p style={{ color: "red" }}>{titleError}</p>}
 
                 <div className="mb-3">
                     <label htmlFor="description" className="form-label">Descrizione</label>
@@ -70,19 +70,20 @@ function AddTask() {
 
                 <div className="mb-3">
                     <label htmlFor="status" className="form-label">Stato</label>
-                    <select 
-                    id="status" 
-                    ref={statusRef} 
-                    className="form-control">
+                    <select
+                        id="status"
+                        ref={statusRef}
+                        defaultValue="To do"
+                        className="form-control">
                         <option value="To do">To Do</option>
                         <option value="Doing">Doing</option>
                         <option value="Done">Done</option>
                     </select>
                 </div>
 
-                {error && <div style={{color: "red"}}>{error}</div>}
-
-                <button type="submit" className="btn btn-primary mt-3">
+                <button type="submit"
+                    disabled={titleError}
+                    className="btn btn-primary mt-3">
                     Aggiungi Task
                 </button>
             </form>
