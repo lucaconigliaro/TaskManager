@@ -73,16 +73,16 @@ Questa variabile viene utilizzata dall’app per puntare al backend. Se cambi la
 ### 📸 Screenshot
 
 **Home Page**
-![Home Page](screenshots/Homepage.png)
+![Home Page](src/screenshots/Homepage.png)
 
 **Lista dei Task**
-![Task List ](screenshots/TaskList.png)
+![Task List](src/screenshots/TaskList.png)
 
 **Dettaglio**
-![Detail](screenshots/Detail.png)
+![Detail](src/screenshots/Detail.png)
 
 **Modal**
-![Modal](screenshots/Modal.png)
+![Modal](src/screenshots/Modal.png)
 
 **Nuovo Task**
-![NewTask](screenshots/NewTask.png)
+![NewTask](src/screenshots/NewTask.png)
