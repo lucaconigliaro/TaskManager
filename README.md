@@ -68,3 +68,21 @@ VITE_BACKEND_URL=http://localhost:3001
 ```
 
 Questa variabile viene utilizzata dall’app per puntare al backend. Se cambi la porta o l’indirizzo, aggiorna questa variabile.
+
+---
+### 📸 Screenshot
+
+**Home Page**
+![Home Page](screenshots/Homepage.png)
+
+**Lista dei Task**
+![Task List ](screenshots/TaskList.png)
+
+**Dettaglio**
+![Detail](screenshots/Detail.png)
+
+**Modal**
+![Modal](screenshots/Modal.png)
+
+**Nuovo Task**
+![NewTask](screenshots/NewTask.png)
