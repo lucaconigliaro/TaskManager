@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-//Variabile d'ambiente
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 function useTasks() {
@@ -19,8 +18,10 @@ function useTasks() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newTask)
         });
+
         const { success, message, task } = await response.json();
         if (!success) throw new Error(message);
+
         setTasks(prevTasks => [...prevTasks, task]);
     };
 
@@ -30,7 +31,8 @@ function useTasks() {
         });
         const { success, message } = await response.json();
         if (!success) throw new Error(message);
-        setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+
+        setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId)); 
     };
 
     async function updateTask(updatedTask) {
@@ -41,9 +43,10 @@ function useTasks() {
         });
         const { success, message, task: newTask } = await response.json();
         if (!success) throw new Error(message);
+
         setTasks(prevTasks =>
             prevTasks.map(oldTask =>
-                oldTask.id === newTask.id ? newTask : oldTask
+                oldTask.id === newTask.id ? newTask : oldTask  
             )
         );
     };
@@ -54,6 +57,6 @@ function useTasks() {
         removeTask,
         updateTask
     });
-};
+}
 
 export default useTasks;

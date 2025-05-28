@@ -1,29 +1,26 @@
 import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GlobalContext } from "../contexts/GlobalContext";
-import Modal from "../components/Modal";
+import { getStatusBadgeClass } from "../utils/statusUtils";
 import EditTaskModal from "../components/EditTaskModal";
+import Modal from "../components/Modal";
 import dayjs from "dayjs";
 
 export default function TaskDetail() {
-    const { id } = useParams(); // Prende l'ID dall'URL
+    const { id } = useParams();
     const { tasks, removeTask, updateTask } = useContext(GlobalContext);
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
 
-    // Trova il task con quell'ID
-    const task = tasks.find(task => task.id === parseInt(id));
-    if (!task)
-        return (
-            <h2 className="container">Task non trovata</h2>
-        );
+    const task = tasks.find((task) => task.id === parseInt(id));
+    if (!task) return <h2 className="container text-white mt-5">Task not found</h2>;
 
     const handleDelete = async () => {
         try {
             await removeTask(task.id);
-            alert("Task eliminato con successo");
-            navigate('/');
+            alert("Task successfully deleted");
+            navigate("/");
         } catch (err) {
             alert(err.message);
         }
@@ -32,38 +29,42 @@ export default function TaskDetail() {
     const handleSave = async (updatedTask) => {
         try {
             await updateTask(updatedTask);
-            setShowEditModal(false)
+            alert("Task updated successfully");
+            setShowEditModal(false);
         } catch (err) {
-            alert("Errore durante la modifica del task:", err.message);
+            alert("Error updating task: " + err.message);
         }
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-start">
-            <div className="card bg-dark text-white" style={{ width: '18rem', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
-                <div className="card-body d-flex flex-column">
-                    <h3 className="card-title">{task.title}</h3>
-                    <p className="card-subtitle mb-2">{dayjs(task.createdAt).format("DD/MM/YYYY")}</p>
-                    <p className="card-text">{task.description}</p>
-                    <p>{task.status}</p>
-                    <div className="mt-auto d-flex justify-content-between">
-                        <button className="btn btn-primary" onClick={() => setShowEditModal(true)}>
-                            Modifica Task
-                        </button>
-                        <button className="btn btn-danger" onClick={() => setShowModal(true)}>
-                            Elimina Task
-                        </button>
-                    </div>
+        <div className="container text-white pt-5 mt-5">
+            <h2 className="text-center fw-bold mb-4">📝 Detail</h2>
+            <div className="bg-dark p-4 rounded shadow w-25 mx-auto">
+                <h3>{task.title}</h3>
+                <p className="mb-1">
+                    Created: {dayjs(task.createdAt).format("DD/MM/YYYY")}
+                </p>
+                <p className="mb-2">{task.description}</p>
+                <p>
+                    Status: <span className={getStatusBadgeClass(task.status)}>{task.status}</span>
+                </p>
+                <div className="d-flex justify-content-between mt-4">
+                    <button className="btn btn-outline-primary shadow" onClick={() => setShowEditModal(true)}>
+                        Edit
+                    </button>
+                    <button className="btn btn-outline-danger shadow" onClick={() => setShowModal(true)}>
+                        Delete
+                    </button>
                 </div>
             </div>
 
             <Modal
-                title="Conferma Eliminazione"
-                content="Sei sicuro di voler eliminare questa task?"
+                title="Confirm Deletion"
+                content="Are you sure you want to delete this task?"
                 show={showModal}
                 onClose={() => setShowModal(false)}
                 onConfirm={handleDelete}
-                confirmText="Elimina"
+                confirmText="Delete"
             />
 
             <EditTaskModal
@@ -74,4 +75,4 @@ export default function TaskDetail() {
             />
         </div>
     );
-};
+}

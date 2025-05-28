@@ -1,34 +1,28 @@
 import dayjs from "dayjs";
 import React from "react";
 import { Link } from "react-router-dom";
+import { getStatusBadgeClass } from "../utils/statusUtils";
 
 function TaskRow({ task }) {
- // Funzione per determinare la classe in base allo stato del task
-    const getStatusClass = (status) => {
-        if (status === "To do")
-            return "bg-danger text-white";
-        else if (status === "Doing")
-            return "bg-warning text-dark";
-        else if (status === "Done")
-            return "bg-success text-white";
-        return "";
-    };
 
     return (
         <tr>
             <td>
-                <Link className="text-decoration-none text-white" to={`/task/${task.id}`}>
+                <Link className="text-white task-title-hover" to={`/task/${task.id}`}>
                     {task.title}
                 </Link>
             </td>
-            <td className={getStatusClass(task.status)}>
-                {task.status}
+            <td>
+                <span className={getStatusBadgeClass(task.status)}>
+                    {task.status}
+                </span>
             </td>
             <td>
                 {dayjs(task.createdAt).format("DD/MM/YYYY")}
             </td>
         </tr>
     );
-};
+}
 
+// Ottimizzazione delle prestazioni per evitare il rendering non necessario
 export default React.memo(TaskRow);

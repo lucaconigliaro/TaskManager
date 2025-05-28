@@ -4,14 +4,16 @@ import Tasklist from "./pages/TaskList";
 import AddTask from "./pages/AddTask";
 import { GlobalProvider } from "./contexts/GlobalContext";
 import TaskDetail from "./pages/TaskDetail";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (
-    <GlobalProvider>
+   <GlobalProvider>
       <BrowserRouter>
         <Routes>
           <Route element={<DefaultLayout />}>
-            <Route path="/" element={<Tasklist />} />
+          <Route path="/" element={<HomePage />} />
+            <Route path="/allTasks" element={<Tasklist />} />
             <Route path="/AddTask" element={<AddTask />} />
             <Route path="/task/:id" element={<TaskDetail />} />
           </Route>
@@ -19,6 +21,6 @@ function App() {
       </BrowserRouter>
     </GlobalProvider>
   );
-};
+}
 
-export default App;
+export default App; 
